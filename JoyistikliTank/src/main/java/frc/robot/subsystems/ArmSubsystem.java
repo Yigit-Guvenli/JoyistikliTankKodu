@@ -1,16 +1,16 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.spark.SparkMax;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.sensors.CANCoder;
+import edu.wpi.first.wpilibj.Encoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmSubsystem extends SubsystemBase {
 
-    private VictorSPX armMotor = new VictorSPX(3);
-    private CANCoder armEncoder = new CANCoder(1); 
+    private  SparkMax armMotor = new SparkMax(3, null);
+    private final Encoder encoder = new Encoder(1,2); 
 
     private PIDController pid = new PIDController(0.02, 0, 0); 
 
@@ -18,13 +18,12 @@ public class ArmSubsystem extends SubsystemBase {
     private final double MAX_ANGLE = 180;
 
     public ArmSubsystem() {
-        armMotor.setInverted(false);
 
         pid.setTolerance(1.0); 
     }
 
     public double getAngle() {
-        return armEncoder.getAbsolutePosition();
+        return encoder.getDistance();
     }
 
     public void moveTo(double targetAngle) {
@@ -35,10 +34,10 @@ public class ArmSubsystem extends SubsystemBase {
         double currentAngle = getAngle();
         double output = pid.calculate(currentAngle, targetAngle);  
 
-        armMotor.set(ControlMode.PercentOutput, output);
+        armMotor.set(output * -1);
     }
 
     public void stop() {
-        armMotor.set(ControlMode.PercentOutput, 0);
+        armMotor.set(0);
     }
 }
