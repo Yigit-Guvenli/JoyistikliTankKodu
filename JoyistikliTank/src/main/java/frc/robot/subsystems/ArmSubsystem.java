@@ -8,7 +8,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmSubsystem extends SubsystemBase {
-
+    
+    private SparkMax tutmaMotor = new SparkMax(4, null);
     private  SparkMax armMotor = new SparkMax(3, null);
     private final Encoder encoder = new Encoder(1,2); 
 
@@ -18,7 +19,6 @@ public class ArmSubsystem extends SubsystemBase {
     private final double MAX_ANGLE = 180;
 
     public ArmSubsystem() {
-
         pid.setTolerance(1.0); 
     }
 
@@ -37,7 +37,15 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor.set(output * -1);
     }
 
-    public void stop() {
-        armMotor.set(0);
+    public void tut() {
+        tutmaMotor.set(0.4);
+    }
+
+    public void birak() {
+        tutmaMotor.set(-0.4);
+    }
+
+    public void tutmadur() {
+        tutmaMotor.set(0);
     }
 }
